@@ -54,6 +54,11 @@ export default {
     onTagClick: function(fieldTag) {
       this.selectedFieldTag = fieldTag;
       this.showTags = fieldTag.tags;
+    },
+
+    resetFieldTags: function() {
+      this.selectedFieldTag = {};
+      this.showTags = null;
     }
   }
 }

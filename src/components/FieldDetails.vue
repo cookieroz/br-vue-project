@@ -1,67 +1,62 @@
 <template>
-  <div class="field-details">
-    <h3>Field Details Section</h3>
-    <div class="field-details-section">
-      <div class="field-type-tags-section">
-        <div class="selected-field-type">
-          {{ selectedFieldType }}
-          <h1>
-            {{ selectedFieldType.name }}
-          </h1>
-          <div class="label-reference-section">
-            <label name="display-label">
-              Display Label
-              <input
-              type="text"
-              class="display-label"
-              name="display-label"
-              v-model.lazy="fieldDetails.displayLabel"
-              :placeholder="selectedFieldType.name"
-              @blur="createReferenceName">
-            </label>
+  <div class="selected-field-type">
+    {{ selectedFieldType }}
+    <h1>
+      {{ selectedFieldType.name }}
+    </h1>
+    <div class="label-reference-section">
+      <label name="display-label">
+        Display Label
+        <input
+        type="text"
+        class="display-label"
+        name="display-label"
+        v-model.lazy="fieldDetails.displayLabel"
+        :placeholder="selectedFieldType.name"
+        @blur="createReferenceName"
+        required />
+      </label>
 
-            <label name="reference-name">
-              Reference Name
-              <input
-              type="text"
-              name="reference-name"
-              v-model.lazy="fieldDetails.referenceName">
-            </label>
-          </div>
+      <label name="reference-name">
+        Reference Name
+        <input
+        type="text"
+        name="reference-name"
+        v-model.lazy="fieldDetails.referenceName">
+      </label>
+    </div>
 
-          <div class="value-validation-section">
-            <label name="default-value">
-              Default Value
-              <input
-              :type="selectedFieldType.inputType"
-              name="default-value"
-              v-model.lazy="fieldDetails.defaultValue">
-            </label>
+    <div class="value-validation-section">
+      <label name="default-value">
+        Default Value
+        <input
+        :type="selectedFieldType.inputType"
+        name="default-value"
+        v-model.lazy="fieldDetails.defaultValue">
+      </label>
 
-            <label name="custom-validation">
-              Custom Validation
-              <input
-              type="text"
-              name="custom-validation"
-              v-model.lazy="fieldDetails.customValidation"
-              @blur="checkIfRegEx">
-            </label>
-          </div>
-
-        </div>
-        <field-tags></field-tags>
+      <label name="custom-validation">
+        Custom Validation
+        <input
+        type="text"
+        name="custom-validation"
+        v-model.lazy="fieldDetails.customValidation"
+        @blur="checkIfRegEx">
+      </label>
+      <div class="error" v-if="isInvalidRegex">
+        Please insert valid Regexp
       </div>
-      <field-groups></field-groups>
+    </div>
+    <div class="form-errors" v-if="errors.length">
+      <b>Please correct the following error(s):</b>
+      <ul>
+        <li v-for="error in errors">{{ error }}</li>
+      </ul>
     </div>
   </div>
 </template>
 
 <script>
-// Imports
-import FieldTypes from './FieldTypes.vue';
-import FieldTags from './FieldTags.vue';
-import FieldGroups from './FieldGroups.vue';
-
 export default {
   props: {
     selectedFieldType: {
@@ -70,36 +65,24 @@ export default {
     }
   },
   components: {
-    'field-types': FieldTypes,
-    'field-tags': FieldTags,
-    'field-groups': FieldGroups
   },
   data () {
     return {
       fieldDetails: {
-        name: this.selectedFieldType.name,
-        definition: this.selectedFieldType.definition,
-        defaultDisplay: this.selectedFieldType.defaultDisplay,
-        inputType: this.selectedFieldType.inputType,
         displayLabel: '',
         referenceName: '',
         defaultValue: '',
-        customValidation: ''
-      }
-    //   blog: {
-    //     title: '',
-    //     content: '',
-    //     categories: [],
-    //     author: ''
-    //   },
-    //   authors: ['The Net Ninja', 'The Angular Avenger', 'The Vue Vindicator'],
-    //   submitted: false
+        customValidation: '',
+        fieldType: {}
+      },
+      isInvalidRegex: false,
+      errors: []
     }
   },
   methods: {
     createReferenceName: function() {
-      console.log(this.fieldDetails.displayLabel);
       this.fieldDetails.referenceName = this.fieldDetails.displayLabel.replace(/\s+/g, '');
+      this.checkForm();
     },
 
     checkIfRegEx: function() {
@@ -107,6 +90,12 @@ export default {
       let regExInput = this.regExpFromString(regExString)
       console.log(regExInput);
       console.log (regExInput instanceof RegExp);
+
+      if (regExInput instanceof RegExp) {
+        this.isInvalidRegex = false;
+      } else {
+        this.isInvalidRegex = true;
+      }
     },
 
     regExpFromString: function (q) {
@@ -114,7 +103,32 @@ export default {
       if (flags === q) flags = '';
       let pattern = (flags ? q.replace(new RegExp('^/(.*?)/' + flags + '$'), '$1') : q);
       try { return new RegExp(pattern, flags); } catch (e) { return null; }
+    },
+
+    sendFieldDetails: function() {
+      this.$emit('fieldDetails', this.fieldDetails);
+      this.checkForm();
+    },
+
+    resetFieldDetails: function() {
+      this.fieldDetails.displayLabel = '';
+      this.fieldDetails.referenceName = '';
+      this.fieldDetails.defaultValue = '';
+      this.fieldDetails.customValidation = '';
+      this.fieldDetails.fieldType = {};
+      this.isInvalidRegex = false;
+    },
+
+    checkForm:function() {
+      if(this.fieldDetails.displayLabel && this.fieldDetails.referenceName) {
+        this.errors = [];
+      }
+      if(!this.fieldDetails.displayLabel) this.errors.push("Display label required.");
+      if(!this.fieldDetails.referenceName) this.errors.push("Reference name required.");
     }
+  },
+  created() {
+    this.fieldDetails.fieldType = this.selectedFieldType;
   }
 }
 </script>

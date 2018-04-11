@@ -8,7 +8,7 @@
       <ul>
         <li
           v-for="fieldGroup in fieldGroups"
-          @click="fieldGroup.groupIncreased = true"
+          @click="onGroupClick(fieldGroup)"
           :class="{ 'active-tab': fieldGroup.groupIncreased }">
           {{ fieldGroup.fieldGroupName }}
           {{ fieldGroup.inputs.length }}
@@ -17,7 +17,18 @@
       field groups go here
 
       <div class="add-group-button">
-        add a new group
+        <p @click="showInput = !showInput">
+          add a new group
+        </p>
+
+        <div v-if="showInput">
+          <input
+            type="text"
+            v-model.lazy="newFieldGroupName"
+            placeholder="New Field Group" />
+          <button @click="addFieldGroup">Submit</button>
+        </div>
+
       </div>
     </div>
   </div>
@@ -25,92 +36,102 @@
 
 <script>
 // Imports
-// import FieldTypes from './components/FieldTypes.vue';
-// import FieldDetails from './components/FieldDetails.vue';
 
 export default {
   components: {
-    // 'field-types': FieldTypes,
-    // 'field-details': FieldDetails
-    // 'field-groups': FieldGroups,
-    // 'field-tags': FieldTags
   },
   data () {
     return {
+      showInput: false,
+      newFieldGroupName: '',
       fieldGroups: [
         {
           fieldGroupName: 'Rental Vehicle Coverage Package',
           groupIncreased: false,
           inputs: [
             {
-              name: 'text',
-              definition: 'String of Text',
-              defaultDisplay: 'Free-form text input',
-              inputType: 'text',
               displayLabel: 'Car Make',
               referenceName: 'carmake',
               defaultValue: 'Honda',
-              customValidation: ''
+              customValidation: '',
+              fieldType: {
+                name: 'text',
+                definition: 'String of Text',
+                defaultDisplay: 'Free-form text input',
+                inputType: 'text',
+              }
             },
             {
-              name: 'text',
-              definition: 'String of Text',
-              defaultDisplay: 'Free-form text input',
-              inputType: 'text',
               displayLabel: 'Car Model',
               referenceName: 'carmodel',
               defaultValue: 'Civic',
-              customValidation: ''
+              customValidation: '',
+              fieldType: {
+                name: 'text',
+                definition: 'String of Text',
+                defaultDisplay: 'Free-form text input',
+                inputType: 'text',
+              }
             },
             {
-              name: 'Date',
-              definition: 'Standard ISO format date',
-              defaultDisplay: 'Datepicker, with configurable format',
-              inputType: 'date',
               displayLabel: 'Rental Start Date',
               referenceName: 'RentalStartDate',
               defaultValue: '7/7/18',
-              customValidation: ''
+              customValidation: '',
+              fieldType: {
+                name: 'Date',
+                definition: 'Standard ISO format date',
+                defaultDisplay: 'Datepicker, with configurable format',
+                inputType: 'date',
+              }
             },
             {
-              name: 'Date',
-              definition: 'Standard ISO format date',
-              defaultDisplay: 'Datepicker, with configurable format',
-              inputType: 'date',
               displayLabel: 'Rental End Date',
               referenceName: 'RentalEndDate',
               defaultValue: '7/10/18',
-              customValidation: ''
+              customValidation: '',
+              fieldType: {
+                name: 'Date',
+                definition: 'Standard ISO format date',
+                defaultDisplay: 'Datepicker, with configurable format',
+                inputType: 'date',
+              }
             },
             {
-              name: 'text',
-              definition: 'String of Text',
-              defaultDisplay: 'Free-form text input',
-              inputType: 'text',
               displayLabel: 'Car License Number',
               referenceName: 'CarLicenseNumber',
               defaultValue: 'TIE8484',
-              customValidation: ''
+              customValidation: '',
+              fieldType: {
+                name: 'text',
+                definition: 'String of Text',
+                defaultDisplay: 'Free-form text input',
+                inputType: 'text'
+              }
             },
             {
-              name: 'text',
-              definition: 'String of Text',
-              defaultDisplay: 'Free-form text input',
-              inputType: 'text',
               displayLabel: 'Car Type',
               referenceName: 'cartype',
               defaultValue: 'coupe',
-              customValidation: ''
+              customValidation: '',
+              fieldType: {
+                name: 'text',
+                definition: 'String of Text',
+                defaultDisplay: 'Free-form text input',
+                inputType: 'text'
+              }
             },
             {
-              name: 'VIN',
-              definition: 'Vehicle Identification Number',
-              defaultDisplay: 'Free-form text input',
-              inputType: 'text',
               displayLabel: 'Car Vin',
               referenceName: 'carvin',
               defaultValue: '888888888888888',
-              customValidation: ''
+              customValidation: '',
+              fieldType: {
+                name: 'VIN',
+                definition: 'Vehicle Identification Number',
+                defaultDisplay: 'Free-form text input',
+                inputType: 'text'
+              }
             }
           ]
         }
@@ -119,18 +140,26 @@ export default {
   },
   methods: {
     onGroupClick: function(fieldGroup) {
+      this.$emit('selectedFieldGroup', fieldGroup);
       fieldGroup.groupIncreased = true;
+    },
+
+    addFieldGroup: function() {
+      this.fieldGroups.push({
+        fieldGroupName: this.newFieldGroupName,
+        inputs: []
+      });
+      this.showInput = false;
+      this.newFieldGroupName = '';
+    },
+
+    resetFieldGroups: function() {
+      this.fieldGroups.showInput = false;
+      this.fieldGroups.newFieldGroupName = '';
+      this.fieldGroups.forEach(function (value) {
+          value.groupIncreased = false;
+      });
     }
-    // post: function(){
-    //   this.$http.post('http://jsonplaceholder.typicode.com/posts', {
-    //     title: this.blog.title,
-    //     body: this.blog.content,
-    //     userId: 1
-    //   }).then(function(data){
-    //     console.log(data);
-    //     this.submitted = true;
-    //   });
-    // }
   }
 }
 </script>
