@@ -3,13 +3,16 @@
     <div class="field-types">
       <h3>Field types section</h3>
       <div class="filter-field-types">
-        filter fields go here
+        <p>
+          Filter Types
+        </p>
+        <input type="text" v-model="search" placeholder="Date" />
       </div>
       <div class="field-types-section">
         field type options go here
         <ul>
           <li
-          v-for="fieldType in fieldTypes"
+          v-for="fieldType in filteredFieldTypes"
           @click="selectedFieldType = fieldType"
           :class="{ 'active-tab': selectedFieldType == fieldType }">
           {{ fieldType.name }}
@@ -17,7 +20,9 @@
         </ul>
       </div>
     </div>
-    <field-details v-bind:selectedFieldType="selectedFieldType"></field-details>
+    <keep-alive>
+      <field-details :selectedFieldType="selectedFieldType"></field-details>
+    </keep-alive>
   </div>
 </template>
 
@@ -41,24 +46,23 @@ export default {
   },
   data () {
     return {
+      search: '',
       selectedFieldType: {}
     }
   },
   methods: {
-    // post: function(){
-    //   this.$http.post('http://jsonplaceholder.typicode.com/posts', {
-    //     title: this.blog.title,
-    //     body: this.blog.content,
-    //     userId: 1
-    //   }).then(function(data){
-    //     console.log(data);
-    //     this.submitted = true;
-    //   });
-    // }
   },
   created() {
     this.fieldTypes;
     this.selectedFieldType = this.fieldTypes[0];
+  },
+  computed: {
+    filteredFieldTypes: function() {
+      return this.fieldTypes.filter((fieldType) => {
+        let fieldTypeLowerCase = fieldType.name.toLowerCase()
+        return fieldTypeLowerCase.match(this.search.toLowerCase());
+      });
+    }
   }
 }
 </script>

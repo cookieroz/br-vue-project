@@ -8,6 +8,46 @@
           <h1>
             {{ selectedFieldType.name }}
           </h1>
+          <div class="label-reference-section">
+            <label name="display-label">
+              Display Label
+              <input
+              type="text"
+              class="display-label"
+              name="display-label"
+              v-model.lazy="fieldDetails.displayLabel"
+              :placeholder="selectedFieldType.name"
+              @blur="createReferenceName">
+            </label>
+
+            <label name="reference-name">
+              Reference Name
+              <input
+              type="text"
+              name="reference-name"
+              v-model.lazy="fieldDetails.referenceName">
+            </label>
+          </div>
+
+          <div class="value-validation-section">
+            <label name="default-value">
+              Default Value
+              <input
+              :type="selectedFieldType.inputType"
+              name="default-value"
+              v-model.lazy="fieldDetails.defaultValue">
+            </label>
+
+            <label name="custom-validation">
+              Custom Validation
+              <input
+              type="text"
+              name="custom-validation"
+              v-model.lazy="fieldDetails.customValidation"
+              @blur="checkIfRegEx">
+            </label>
+          </div>
+
         </div>
         <field-tags></field-tags>
       </div>
@@ -34,8 +74,18 @@ export default {
     'field-tags': FieldTags,
     'field-groups': FieldGroups
   },
-  // data () {
-    // return {
+  data () {
+    return {
+      fieldDetails: {
+        name: this.selectedFieldType.name,
+        definition: this.selectedFieldType.definition,
+        defaultDisplay: this.selectedFieldType.defaultDisplay,
+        inputType: this.selectedFieldType.inputType,
+        displayLabel: '',
+        referenceName: '',
+        defaultValue: '',
+        customValidation: ''
+      }
     //   blog: {
     //     title: '',
     //     content: '',
@@ -44,19 +94,27 @@ export default {
     //   },
     //   authors: ['The Net Ninja', 'The Angular Avenger', 'The Vue Vindicator'],
     //   submitted: false
-    // }
-  // },
+    }
+  },
   methods: {
-    // post: function(){
-    //   this.$http.post('http://jsonplaceholder.typicode.com/posts', {
-    //     title: this.blog.title,
-    //     body: this.blog.content,
-    //     userId: 1
-    //   }).then(function(data){
-    //     console.log(data);
-    //     this.submitted = true;
-    //   });
-    // }
+    createReferenceName: function() {
+      console.log(this.fieldDetails.displayLabel);
+      this.fieldDetails.referenceName = this.fieldDetails.displayLabel.replace(/\s+/g, '');
+    },
+
+    checkIfRegEx: function() {
+      let regExString = this.fieldDetails.customValidation
+      let regExInput = this.regExpFromString(regExString)
+      console.log(regExInput);
+      console.log (regExInput instanceof RegExp);
+    },
+
+    regExpFromString: function (q) {
+      let flags = q.replace(/.*\/([gimuy]*)$/, '$1');
+      if (flags === q) flags = '';
+      let pattern = (flags ? q.replace(new RegExp('^/(.*?)/' + flags + '$'), '$1') : q);
+      try { return new RegExp(pattern, flags); } catch (e) { return null; }
+    }
   }
 }
 </script>

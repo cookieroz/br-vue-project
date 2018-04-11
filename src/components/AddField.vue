@@ -21,32 +21,38 @@ export default {
         {
           name: 'Text',
           definition: 'String of Text',
-          defaultDisplay: 'Free-form text input'
+          defaultDisplay: 'Free-form text input',
+          inputType: 'text'
         },
         {
           name: 'Date',
           definition: 'Standard ISO format date',
-          defaultDisplay: 'Datepicker, with configureable format'
+          defaultDisplay: 'Datepicker, with configureable format',
+          inputType: 'date'
         },
         {
           name: 'VIN',
           definition: 'Vehicle Identification Number',
-          defaultDisplay: 'Free-form text input'
+          defaultDisplay: 'Free-form text input',
+          inputType: 'text'
         },
         {
           name: 'Currency',
           definition: 'Currency',
-          defaultDisplay: 'Free-form text input'
+          defaultDisplay: 'Free-form text input',
+          inputType: 'text'
          },
         {
           name: 'Select',
           definition: 'Select box',
-          defaultDisplay: 'multiple preset options with a single choice'
+          defaultDisplay: 'multiple preset options with a single choice',
+          inputType: 'select'
         },
         {
           name: 'Number',
           definition: 'String with numbers',
-          defaultDisplay: 'Free-form text input'
+          defaultDisplay: 'Free-form text input',
+          inputType: 'number'
         }
       ]
       // authors: ['The Net Ninja', 'The Angular Avenger', 'The Vue Vindicator'],
