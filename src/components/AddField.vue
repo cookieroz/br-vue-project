@@ -1,6 +1,6 @@
 <template>
   <div id="add-field">
-    <h2>add field section</h2>
+    <h2 class="page-title">Commercial Property - Add Field</h2>
     <div class="add-field-sections">
       <field-types
         ref="fieldTypeComponent"
@@ -27,8 +27,17 @@
     </div>
 
     <div class="add-field-controls">
-      <button @click="saveFieldItem">Save Changes</button>
-      <button @click="resetForm">Cancel</button>
+      <div class="save-field btn" @click="saveFieldItem">
+        Save Changes
+      </div>
+      <div class="no-add-field-buttons">
+        <div class="cancel-field btn" @click="resetForm">
+          Cancel
+        </div>
+        <div class="delete-field btn" @click="resetForm">
+          Delete
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -63,7 +72,6 @@ export default {
     },
 
     getFieldGroup: function(selectedFieldGroup) {
-      console.log(selectedFieldGroup);
       this.fieldItem.fieldGroups.push(selectedFieldGroup);
     },
 
@@ -90,8 +98,50 @@ export default {
 }
 </script>
 
-<style>
-.add-field-sections {
-  display: flex;
-}
+<style lang="scss">
+  @import '../assets/scss/_mixins';
+
+  #add-field {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 60px);
+    padding: 1em;
+
+    .page-title {
+      font-size: 1.8em;
+      font-weight: lighter;
+      margin-bottom: 1rem;
+    }
+  }
+
+  .add-field-sections {
+    @include round-accent-border;
+    display: flex;
+    font-weight: lighter;
+    overflow: hidden;
+
+    h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .field-label {
+      font-weight: 500;
+    }
+  }
+
+  .add-field-controls {
+    display: flex;
+    padding: 1em 0;
+    justify-content: space-between;
+
+    .btn {
+      @include round-accent-border;
+      cursor: pointer;
+      display: inline-block;
+      height: 15px;
+      padding: 5px;
+    }
+  }
 </style>

@@ -1,12 +1,11 @@
 <template>
   <div class="selected-field-type">
-    {{ selectedFieldType }}
     <h1>
       {{ selectedFieldType.name }}
     </h1>
     <div class="label-reference-section">
-      <label name="display-label">
-        Display Label
+      <div class="display-label">
+        <label name="display-label">Display Label</label>
         <input
         type="text"
         class="display-label"
@@ -15,34 +14,52 @@
         :placeholder="selectedFieldType.name"
         @blur="createReferenceName"
         required />
-      </label>
+        <p class="small-accent-text">
+          For display purposes, spaces allowed
+        </p>
+      </div>
 
-      <label name="reference-name">
-        Reference Name
+      <div class="reference-name">
+        <label name="reference-name">Reference Name</label>
         <input
         type="text"
         name="reference-name"
-        v-model.lazy="fieldDetails.referenceName">
-      </label>
+        v-model.lazy="fieldDetails.referenceName" />
+        <p class="small-accent-text">
+          Used to reference in calculations,
+          no spaces allowed.
+        </p>
+      </div>
     </div>
 
     <div class="value-validation-section">
-      <label name="default-value">
-        Default Value
+      <div
+        v-if="selectedFieldType.inputType == 'select'"
+        class="select-option-value">
+        <select v-model="fieldDetails.defaultValue">
+          <option
+            v-for="option in selectedFieldType.options">
+            {{ option }}
+          </option>
+        </select>
+      </div>
+      <div class="input-default-value" v-else>
+        <label name="default-value">Default Value</label>
         <input
-        :type="selectedFieldType.inputType"
-        name="default-value"
-        v-model.lazy="fieldDetails.defaultValue">
-      </label>
+          :type="selectedFieldType.inputType"
+          name="default-value"
+          v-model.lazy="fieldDetails.defaultValue" />
+      </div>
 
-      <label name="custom-validation">
-        Custom Validation
-        <input
+      <label name="custom-validation">Custom Validation</label>
+      <input
         type="text"
         name="custom-validation"
         v-model.lazy="fieldDetails.customValidation"
-        @blur="checkIfRegEx">
-      </label>
+        @blur="checkIfRegEx" />
+        <p class="small-accent-text">
+          Any regex can be used for custom input validation
+        </p>
       <div class="error" v-if="isInvalidRegex">
         Please insert valid Regexp
       </div>
@@ -133,12 +150,20 @@ export default {
 }
 </script>
 
-<style>
-.field-details {
-  flex-grow: 2;
-}
+<style lang="scss">
+  @import '../assets/scss/_mixins';
+  
+  .field-details {
+    flex-grow: 2;
+    padding: 1.2em 1em;
+    overflow-y: scroll;
+  }
 
-.field-details-section {
-  display: flex;
-}
+  .label-reference-section {
+    display: flex;
+  }
+
+  .field-details-section {
+    display: flex;
+  }
 </style>

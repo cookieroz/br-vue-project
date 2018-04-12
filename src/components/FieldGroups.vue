@@ -1,23 +1,34 @@
 <template>
   <div class="field-groups">
     <h4>Field groups</h4>
-    <p>
+    <p class="small-accent-text">
       choose a group for this input
     </p>
+
     <div class="field-groups-section">
       <ul>
         <li
           v-for="fieldGroup in fieldGroups"
           @click="onGroupClick(fieldGroup)"
           :class="{ 'active-tab': fieldGroup.groupIncreased }">
-          {{ fieldGroup.fieldGroupName }}
-          {{ fieldGroup.inputs.length }}
+          <h5>{{ fieldGroup.fieldGroupName }}</h5>
+          <p class="small-accent-text">
+            {{ fieldGroup.inputs.length }}
+            <span v-if="fieldGroup.inputs.length > 1">
+              other inputs
+            </span>
+            <span v-else-if="fieldGroup.inputs.length == 1">
+              other input
+            </span>
+            <span v-else>
+              no inputs
+            </span>
+          </p>
         </li>
       </ul>
-      field groups go here
 
       <div class="add-group-button">
-        <p @click="showInput = !showInput">
+        <p class="round-accent-border" @click="showInput = !showInput">
           add a new group
         </p>
 
@@ -28,7 +39,6 @@
             placeholder="New Field Group" />
           <button @click="addFieldGroup">Submit</button>
         </div>
-
       </div>
     </div>
   </div>
@@ -164,6 +174,30 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+  @import '../assets/scss/_mixins';
+
+  .field-groups {
+    @include round-accent-border;
+    background-color: $light-background-color;
+    padding: 1.2em 1em;
+  }
+
+  .field-groups-section {
+    li {
+      @include round-accent-border;
+      background-color: #ffffff;
+      padding: 1em;
+    }
+  }
+
+  .add-group-button {
+    p {
+      background: white;
+      padding: 10px;
+      text-align: center;
+      text-transform: capitalize;
+    }
+  }
 
 </style>

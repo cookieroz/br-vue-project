@@ -1,0 +1,18 @@
+@import 'reset';
+@import 'mixins';
+@import 'helpers';
+
+body {
+  color: $default-text-color;
+  font-family: 'Helvetica', 'Arial', sans-serif;
+}
+
+input {
+  @include round-accent-border;
+  height: 20px;
+  padding: 3px;
+}
+
+label {
+  display: block;
+}

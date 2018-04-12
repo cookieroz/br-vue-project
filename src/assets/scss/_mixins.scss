@@ -1,0 +1,15 @@
+@import 'variables';
+@mixin flex {
+  display: -webkit-flex;
+  display: flex;
+}
+
+@mixin small-accent-text {
+  color: $accent-text-color;
+  font-size: 12px;
+}
+
+@mixin round-accent-border {
+  border: 1px solid $main-border-color;
+  border-radius: 3px;
+}

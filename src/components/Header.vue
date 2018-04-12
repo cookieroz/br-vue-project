@@ -2,7 +2,7 @@
   <nav>
     <ul>
       <li>
-        logo goes here
+        BriteCore
       </li>
       <li>policies</li>
       <li>claims</li>
@@ -18,13 +18,19 @@
 export default {}
 </script>
 
-<style scoped>
+<style lang="scss">
+  @import '../assets/scss/_mixins';
+
   nav {
-    background-color: teal;
+    background-color: $header-background-color;
     color: white;
+    height: 30px;
   }
+
   nav ul {
+    align-items: center;
     display: flex;
+    height: 100%;
     justify-content: space-between;
   }
 </style>

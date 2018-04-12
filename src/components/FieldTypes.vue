@@ -2,20 +2,25 @@
   <div class="field-types">
     <h3>Field types section</h3>
     <div class="filter-field-types">
-      <p>
-        Filter Types
-      </p>
-      <input type="text" v-model="search" placeholder="Date" />
+      <label>Filter Types</label>
+      <input type="text" v-model="search" placeholder="Filter FieldTypes" />
     </div>
     <div class="field-types-section">
-      field type options go here
       <ul>
         <li
-        v-for="fieldType in filteredFieldTypes"
-        @click="showFieldDetails(fieldType)"
-        :class="{ 'active-tab': selectedFieldType == fieldType }">
-        {{ fieldType.name }}
-      </li>
+          v-for="fieldType in filteredFieldTypes"
+          @click="showFieldDetails(fieldType)"
+          :class="{ 'active-type': selectedFieldType == fieldType }">
+          <h3 class="field-type-title">{{ fieldType.name }}</h3>
+          <div class="field-type-definition">
+            <h5>Definition</h5>
+            <p>{{ fieldType.definition }}</p>
+          </div>
+          <div class="field-type-default-display">
+            <h5>Default Display</h5>
+            <p>{{ fieldType.defaultDisplay }}</p>
+          </div>
+        </li>
       </ul>
     </div>
   </div>
@@ -68,7 +73,8 @@ export default {
           name: 'Select',
           definition: 'Select box',
           defaultDisplay: 'multiple preset options with a single choice',
-          inputType: 'select'
+          inputType: 'select',
+          options: ['option-1','option-2'],
         },
         {
           name: 'Number',
@@ -103,14 +109,54 @@ export default {
 }
 </script>
 
-<style>
-.field-types {
-  flex-grow: 1;
-  margin-right: 1em;
-}
+<style lang="scss">
+  @import '../assets/scss/_mixins';
+  .field-types {
+    background-color: $field-types-background-color;
+    border-right: 1px solid $main-border-color;
+    flex-grow: 1;
+    margin-right: 1em;
+    overflow-y: scroll;
+    padding: 1.2em 1em;
+  }
 
-.active-tab {
-  color: cornflowerblue;
-  text-transform: uppercase;
-}
+  .filter-field-types {
+    margin-bottom: 1rem;
+
+    label {
+      margin-bottom: 5px;
+    }
+
+    input {
+      margin-bottom: 5px;
+    }
+  }
+
+  .field-types-section {
+    li {
+      @include round-accent-border;
+      background-color: #ffffff;
+      display: block;
+      margin-bottom: 10px;
+      padding: 5px;
+
+      p {
+        margin-bottom: 15px;
+      }
+
+      &.active-type {
+        background-color: $selected-field-type-background-color;
+        color: #ffffff;
+
+        h5 {
+          color: #ffffff;
+        }
+      }
+    }
+
+    h5 {
+      @include small-accent-text;
+      margin-bottom: 10px;
+    }
+  }
 </style>
