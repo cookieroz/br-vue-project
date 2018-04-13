@@ -105,7 +105,7 @@ export default {
     display: flex;
     flex-direction: column;
     height: calc(100vh - 60px);
-    padding: 1em;
+    padding: 15px;
 
     .page-title {
       font-size: 1.8em;
@@ -133,7 +133,7 @@ export default {
 
   .add-field-controls {
     display: flex;
-    padding: 1em 0;
+    padding: 15px 0;
     justify-content: space-between;
 
     .btn {

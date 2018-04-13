@@ -1,6 +1,6 @@
 <template>
   <div class="field-groups">
-    <h4>Field groups</h4>
+    <h4 class="field-label">Field groups</h4>
     <p class="small-accent-text">
       choose a group for this input
     </p>
@@ -181,9 +181,24 @@ export default {
     @include round-accent-border;
     background-color: $light-background-color;
     padding: 1.2em 1em;
+
+    .small-accent-text,
+    .field-label {
+      margin-bottom: 10px;
+    }
+
   }
 
   .field-groups-section {
+    display: flex;
+    flex-direction: column;
+    height: 88%;
+    justify-content: space-between;
+
+    ul {
+      margin-top: 10px;
+    }
+
     li {
       @include round-accent-border;
       background-color: #ffffff;
@@ -193,10 +208,15 @@ export default {
 
   .add-group-button {
     p {
-      background: white;
+      background: #ffffff;
+      cursor: pointer;
       padding: 10px;
       text-align: center;
       text-transform: capitalize;
+    }
+
+    input {
+      margin: 10px 0;
     }
   }
 

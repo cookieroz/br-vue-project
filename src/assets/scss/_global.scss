@@ -5,12 +5,20 @@
 body {
   color: $default-text-color;
   font-family: 'Helvetica', 'Arial', sans-serif;
+  font-size: 14px;
 }
 
+select,
 input {
   @include round-accent-border;
-  height: 20px;
-  padding: 3px;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  display: block;
+  height: 30px;
+  line-height: 30px;
+  font-size: 1rem;
+  padding: 0 5px;
+  width: 100%;
 }
 
 label {

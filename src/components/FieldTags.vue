@@ -9,7 +9,7 @@
           <li
             v-for="fieldTag in fieldTags"
             @click="onTagClick(fieldTag)"
-            :class="{ 'active-tab': selectedFieldTag == fieldTag }">
+            :class="{ 'active-tag': selectedFieldTag == fieldTag }">
             {{ fieldTag.groupName }}
           </li>
         </ul>
@@ -72,23 +72,33 @@ export default {
 
 <style lang="scss">
   @import '../assets/scss/_mixins';
+
   .field-tags-section {
     display: flex;
-
-    li {
-      @include round-accent-border;
-      background-color: $tag-button-background-color;
-      color: $accent-text-color;
-      display: inline-block;
-      font-weight: 500;
-      margin: 10px 10px 0 0;
-      padding: 5px;
-    }
   }
 
   .tag-groups-section,
   .tags-section {
     flex: 1;
+
+    li {
+      color: $accent-text-color;
+      display: inline-block;
+      font-weight: 500;
+      margin: 10px 10px 0 0;
+
+      &.active-tag {
+        background-color: #ffffff;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .tag-groups-section li {
+    @include round-accent-border;
+    background-color: $tag-button-background-color;
+    cursor: pointer;
+    padding: 5px;
   }
 
   .no-shown-tags {

@@ -3,7 +3,7 @@
     <h3>Field types section</h3>
     <div class="filter-field-types">
       <label>Filter Types</label>
-      <input type="text" v-model="search" placeholder="Filter FieldTypes" />
+      <input type="text" v-model="search" />
     </div>
     <div class="field-types-section">
       <ul>
@@ -111,13 +111,13 @@ export default {
 
 <style lang="scss">
   @import '../assets/scss/_mixins';
+
   .field-types {
+    @include default-padding;
     background-color: $field-types-background-color;
     border-right: 1px solid $main-border-color;
     flex-grow: 1;
-    margin-right: 1em;
     overflow-y: scroll;
-    padding: 1.2em 1em;
   }
 
   .filter-field-types {

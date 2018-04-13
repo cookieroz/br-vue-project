@@ -5,3 +5,7 @@
 .round-accent-border {
   @include round-accent-border;
 }
+
+.default-padding {
+  @include default-padding;
+}

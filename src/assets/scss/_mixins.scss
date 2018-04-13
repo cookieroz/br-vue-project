@@ -13,3 +13,7 @@
   border: 1px solid $main-border-color;
   border-radius: 3px;
 }
+
+@mixin default-padding {
+  padding: 20px 15px;
+}

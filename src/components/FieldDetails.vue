@@ -1,9 +1,6 @@
 <template>
   <div class="selected-field-type">
-    <h1>
-      {{ selectedFieldType.name }}
-    </h1>
-    <div class="label-reference-section">
+    <div class="column">
       <div class="display-label">
         <label name="display-label">Display Label</label>
         <input
@@ -11,31 +8,18 @@
         class="display-label"
         name="display-label"
         v-model.lazy="fieldDetails.displayLabel"
-        :placeholder="selectedFieldType.name"
         @blur="createReferenceName"
         required />
         <p class="small-accent-text">
           For display purposes, spaces allowed
         </p>
+        <div class="error" v-if="hasNoDisplayLabel">
+          Please insert a display label
+        </div>
       </div>
 
-      <div class="reference-name">
-        <label name="reference-name">Reference Name</label>
-        <input
-        type="text"
-        name="reference-name"
-        v-model.lazy="fieldDetails.referenceName" />
-        <p class="small-accent-text">
-          Used to reference in calculations,
-          no spaces allowed.
-        </p>
-      </div>
-    </div>
-
-    <div class="value-validation-section">
-      <div
-        v-if="selectedFieldType.inputType == 'select'"
-        class="select-option-value">
+      <div class="select-option-value"
+        v-if="selectedFieldType.inputType == 'select'">
         <select v-model="fieldDetails.defaultValue">
           <option
             v-for="option in selectedFieldType.options">
@@ -51,24 +35,34 @@
           v-model.lazy="fieldDetails.defaultValue" />
       </div>
 
-      <label name="custom-validation">Custom Validation</label>
-      <input
-        type="text"
-        name="custom-validation"
-        v-model.lazy="fieldDetails.customValidation"
-        @blur="checkIfRegEx" />
-        <p class="small-accent-text">
-          Any regex can be used for custom input validation
-        </p>
-      <div class="error" v-if="isInvalidRegex">
-        Please insert valid Regexp
+      <div class="custom-validation-section">
+        <label name="custom-validation">Custom Validation</label>
+        <input
+          type="text"
+          name="custom-validation"
+          v-model.lazy="fieldDetails.customValidation"
+          @blur="checkIfRegEx" />
+          <p class="small-accent-text">
+            Any regex can be used for custom input validation
+          </p>
+        <div class="error" v-if="isInvalidRegex">
+          Please insert valid Regexp
+        </div>
       </div>
     </div>
-    <div class="form-errors" v-if="errors.length">
-      <b>Please correct the following error(s):</b>
-      <ul>
-        <li v-for="error in errors">{{ error }}</li>
-      </ul>
+
+    <div class="column">
+      <div class="reference-name">
+        <label name="reference-name">Reference Name</label>
+        <input
+        type="text"
+        name="reference-name"
+        v-model.lazy="fieldDetails.referenceName" />
+        <p class="small-accent-text">
+          Used to reference in calculations,
+          no spaces allowed.
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -93,20 +87,22 @@ export default {
         fieldType: {}
       },
       isInvalidRegex: false,
-      errors: []
+      hasNoDisplayLabel: false
     }
   },
   methods: {
     createReferenceName: function() {
-      this.fieldDetails.referenceName = this.fieldDetails.displayLabel.replace(/\s+/g, '');
-      this.checkForm();
+      if (this.fieldDetails.displayLabel) {
+        this.fieldDetails.referenceName = this.fieldDetails.displayLabel.replace(/\s+/g, '');
+        this.hasNoDisplayLabel = false;
+      } else {
+        this.hasNoDisplayLabel = true;
+      }
     },
 
     checkIfRegEx: function() {
       let regExString = this.fieldDetails.customValidation
       let regExInput = this.regExpFromString(regExString)
-      console.log(regExInput);
-      console.log (regExInput instanceof RegExp);
 
       if (regExInput instanceof RegExp) {
         this.isInvalidRegex = false;
@@ -124,7 +120,6 @@ export default {
 
     sendFieldDetails: function() {
       this.$emit('fieldDetails', this.fieldDetails);
-      this.checkForm();
     },
 
     resetFieldDetails: function() {
@@ -135,14 +130,6 @@ export default {
       this.fieldDetails.fieldType = {};
       this.isInvalidRegex = false;
     },
-
-    checkForm:function() {
-      if(this.fieldDetails.displayLabel && this.fieldDetails.referenceName) {
-        this.errors = [];
-      }
-      if(!this.fieldDetails.displayLabel) this.errors.push("Display label required.");
-      if(!this.fieldDetails.referenceName) this.errors.push("Reference name required.");
-    }
   },
   created() {
     this.fieldDetails.fieldType = this.selectedFieldType;
@@ -152,18 +139,39 @@ export default {
 
 <style lang="scss">
   @import '../assets/scss/_mixins';
-  
+
   .field-details {
+    @include default-padding;
     flex-grow: 2;
-    padding: 1.2em 1em;
     overflow-y: scroll;
   }
 
-  .label-reference-section {
+  .field-details-section,
+  .selected-field-type {
     display: flex;
+    justify-content: space-between;
   }
 
-  .field-details-section {
-    display: flex;
+  .column {
+    margin-right: 20px;
+
+    > div {
+      margin-bottom: 20px;
+    }
+  }
+
+  .selected-field-type {
+    label {
+      margin-bottom: 10px;
+    }
+
+    input {
+      margin-bottom: 5px;
+    }
+  }
+
+  .error {
+    color: red;
+    margin-top: 15px;
   }
 </style>

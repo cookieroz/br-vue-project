@@ -1,9 +1,9 @@
 <template>
   <nav>
+    <div class="logo">
+      BriteCore
+    </div>
     <ul>
-      <li>
-        BriteCore
-      </li>
       <li>policies</li>
       <li>claims</li>
       <li>contacts</li>
@@ -22,15 +22,25 @@ export default {}
   @import '../assets/scss/_mixins';
 
   nav {
+    align-items: center;
     background-color: $header-background-color;
     color: white;
-    height: 30px;
-  }
-
-  nav ul {
-    align-items: center;
     display: flex;
-    height: 100%;
-    justify-content: space-between;
+    height: 30px;
+    padding: 0 15px;
+
+    .logo {
+      margin-right: 30px;
+    }
+
+    ul {
+      height: 100%;
+    }
+
+    li {
+      display: inline-block;
+      line-height: 30px;
+      padding: 0 5px;
+    }
   }
 </style>
